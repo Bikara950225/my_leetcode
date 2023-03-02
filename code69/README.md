@@ -1,0 +1,3 @@
+# 69. x 的平方根 
+
+https://leetcode.cn/problems/sqrtx/
