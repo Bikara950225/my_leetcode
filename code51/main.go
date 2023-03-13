@@ -58,7 +58,6 @@ func dfs(n int, ml [][]int, x int) {
 		xLine[i] = 0
 		delete(m, i)
 	}
-	return
 }
 
 func check(ml [][]int, n, x, y int) bool {
