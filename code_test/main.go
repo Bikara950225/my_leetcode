@@ -35,8 +35,24 @@ func longestPalindromeSubseq(s string) (ret int) {
 	return dp[0][len(dp)-1]
 }
 
+func search(src []int, target int) (i int) {
+	j := len(src) - 1
+	for i < j {
+		m := (i + j) >> 1
+		if src[m] >= target {
+			j = m
+		} else {
+			i = m + 1
+		}
+	}
+	if src[i] == target {
+		return
+	}
+	return -1
+}
+
 func main() {
-	ret1 := longestPalindromeSubseq("11121")
+	ret1 := search([]int{1, 2, 3, 4, 5}, 5)
 	if ret1 != 4 {
 		panic("stupid")
 	}
