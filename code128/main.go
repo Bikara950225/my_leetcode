@@ -3,37 +3,32 @@ package main
 import "fmt"
 
 func longestConsecutive(nums []int) (ret int) {
-	if len(nums) <= 0 {
-		return
-	}
-	ret = 1
-
-	m := map[int]struct{}{}
+	numSet := make(map[int]struct{}, len(nums))
 	for _, num := range nums {
-		m[num] = struct{}{}
+		numSet[num] = struct{}{}
 	}
 
 	for _, num := range nums {
-		if _, ok := m[num-1]; ok {
+		if _, ok := numSet[num-1]; ok {
 			continue
 		}
-
-		loopRet := 1
-		for currNum := num+1; ; currNum++ {
-			if _, ok := m[currNum]; !ok {
-				if loopRet > ret {
-					ret = loopRet
-				}
+		subRet := 0
+		for {
+			if _, ok := numSet[num]; !ok {
 				break
 			}
-			loopRet += 1
+			subRet++
+			num++
+		}
+		if subRet > ret {
+			ret = subRet
 		}
 	}
 	return
 }
 
 func main() {
-	ret1 := longestConsecutive([]int{1, 4, 3, 5, 6, 2})
+	ret1 := longestConsecutive([]int{1, 4, 3, 5, 6, 2}) // 1，2，3，4，5，6
 	if ret1 != 6 {
 		panic(fmt.Errorf("code128 error, not expect ret1: %d", ret1))
 	}
