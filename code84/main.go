@@ -1,13 +1,41 @@
 package main
 
-import "my_leetcode/internal/tools"
+import (
+	"fmt"
+	"my_leetcode/internal/tools"
+)
 
 func main() {
 
+	ret1 := largestRectangleArea([]int{4, 2, 0, 3, 2, 5})
+	if ret1 != 6 {
+		panic(fmt.Errorf("code84 error, ret1 != 6: %d", ret1))
+	}
 }
 
 func largestRectangleArea(heights []int) (ret int) {
+	heights = append(heights, 0)
+	stack := []int{0}
 
+	for i := 1; i < len(heights); i++ {
+		// 入栈处理
+		for len(stack) > 0 && heights[i] < heights[stack[len(stack)-1]] {
+			popIdx := stack[len(stack)-1]
+			stack = stack[:len(stack)-1]
+
+			var area int
+			if len(stack) == 0 {
+				area = heights[popIdx] * i
+			} else {
+				area = heights[popIdx] * (i - stack[len(stack)-1] - 1)
+			}
+			if area > ret {
+				ret = area
+			}
+		}
+		stack = append(stack, i)
+	}
+	return
 }
 
 // 这个方法创建的dp会导致OOM。。。
