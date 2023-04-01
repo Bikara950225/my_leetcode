@@ -2,10 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"math"
 	treenode "my_leetcode/internal/tree_node"
-	"reflect"
 )
 
 type Codec struct {
@@ -63,23 +61,8 @@ func (s *Codec) deserialize(data string) *treenode.TreeNode {
 }
 
 func main() {
-	c := Codec{}
-
-	ret1Tree := &treenode.TreeNode{
-		Val: 3,
-		Left: &treenode.TreeNode{
-			Val: 1,
-			Right: &treenode.TreeNode{
-				Val: 2,
-			},
-		},
+	m := map[string]int{
+		"asd": 123,
 	}
-	ret1_1 := c.serialize(ret1Tree)
-	if ret1_1 != `[3,1,2]` {
-		panic(fmt.Errorf("ret1_1 not match expect: %s", ret1_1))
-	}
-	ret1_2 := c.deserialize(ret1_1)
-	if !reflect.DeepEqual(ret1Tree, ret1_2) {
-		panic(fmt.Errorf("ret1_2 not match expect: %v", ret1_2))
-	}
+	delete(m, "3333")
 }
