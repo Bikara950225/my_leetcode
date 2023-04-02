@@ -15,19 +15,19 @@ func main() {
 
 func largestRectangleArea(heights []int) (ret int) {
 	heights = append(heights, 0)
-	stack := []int{0}
+	// 单调递增栈
+	var stack []int
 
-	for i := 1; i < len(heights); i++ {
-		// 入栈处理
-		for len(stack) > 0 && heights[i] < heights[stack[len(stack)-1]] {
-			popIdx := stack[len(stack)-1]
+	for i, h := range heights {
+		for len(stack) > 0 && h < heights[stack[len(stack)-1]] {
+			topIdx := stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
 
 			var area int
-			if len(stack) == 0 {
-				area = heights[popIdx] * i
+			if len(stack) > 0 {
+				area = heights[topIdx] * (i - stack[len(stack)-1] - 1)
 			} else {
-				area = heights[popIdx] * (i - stack[len(stack)-1] - 1)
+				area = heights[topIdx] * i
 			}
 			if area > ret {
 				ret = area
