@@ -6,7 +6,6 @@ import (
 )
 
 func main() {
-
 	ret1 := largestRectangleArea([]int{4, 2, 0, 3, 2, 5})
 	if ret1 != 6 {
 		panic(fmt.Errorf("code84 error, ret1 != 6: %d", ret1))
