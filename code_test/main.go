@@ -6,6 +6,12 @@ import (
 	treenode "my_leetcode/internal/tree_node"
 )
 
+const (
+	e1 = iota
+	e2
+	e3
+)
+
 type Codec struct {
 }
 
@@ -60,9 +66,14 @@ func (s *Codec) deserialize(data string) *treenode.TreeNode {
 	return dfsFunc(math.MinInt, math.MaxInt)
 }
 
+type TestI interface {
+	method()
+}
+
+type Test struct{}
+
+func (s *Test) method() {}
+
 func main() {
-	m := map[string]int{
-		"asd": 123,
-	}
-	delete(m, "3333")
+
 }
