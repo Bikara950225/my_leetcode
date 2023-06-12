@@ -13,7 +13,7 @@ const (
 )
 
 // 使用后序遍历的方式对二叉搜索树进行序列化、反序列化
-type CodecPostorder struct {}
+type CodecPostorder struct{}
 
 func Constructor() *CodecPostorder {
 	return &CodecPostorder{}
@@ -57,9 +57,9 @@ func (s *CodecPostorder) deserialize(data string) *treenode.TreeNode {
 
 		postorder = postorder[:len(postorder)-1]
 		return &treenode.TreeNode{
-			Val: currVal,
-			Right: defFunc(currVal, max),
-			Left: defFunc(min, currVal),
+			Val:   currVal,
+			Right: defFunc(currVal, max), // warn: 基于后续遍历的反序列化，必须要先处理Right
+			Left:  defFunc(min, currVal),
 		}
 	}
 	return defFunc(math.MinInt, math.MaxInt)

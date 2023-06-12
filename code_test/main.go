@@ -75,5 +75,7 @@ type Test struct{}
 func (s *Test) method() {}
 
 func main() {
-
+	ll := []int{}
+	ll = ll[:1]
+	println(ll)
 }
