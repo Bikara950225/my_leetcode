@@ -2,8 +2,12 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"math"
+	"math/rand"
 	treenode "my_leetcode/internal/tree_node"
+	"reflect"
+	"unsafe"
 )
 
 const (
@@ -66,16 +70,48 @@ func (s *Codec) deserialize(data string) *treenode.TreeNode {
 	return dfsFunc(math.MinInt, math.MaxInt)
 }
 
-type TestI interface {
-	method()
+func unsafeStringToBytes(src string) []byte {
+	sh := (*reflect.StringHeader)(unsafe.Pointer(&src))
+	println(sh.Data)
+
+	return (*[math.MaxInt32]byte)(unsafe.Pointer(sh.Data))[:sh.Len:sh.Len]
 }
 
-type Test struct{}
+func unsafeBytesToString(src []byte) string {
+	//return *(*string)(unsafe.Pointer(&src))
+	sliH := (*reflect.SliceHeader)(unsafe.Pointer(&src))
+	println(sliH.Data)
+	return *(*string)(unsafe.Pointer(&src))
+}
 
-func (s *Test) method() {}
+func quickSort(src []int, b, e int) {
+	if b >= e {
+		return
+	}
+
+	randIdx := b + (rand.Int() % (e - b + 1))
+	mark := src[randIdx]
+	src[e], src[randIdx] = src[randIdx], src[e]
+
+	i, j := b-1, b
+	for ; j < e; j++ {
+		if src[j] < mark {
+			i++
+			src[i], src[j] = src[j], src[i]
+		}
+	}
+	i++
+	src[i], src[e] = src[e], src[i]
+
+	quickSort(src, b, i-1)
+	quickSort(src, i+1, e)
+}
 
 func main() {
-	ll := []int{}
-	ll = ll[:1]
-	println(ll)
+	s := "abc"
+	st := ""
+	for _, item := range s {
+		st += string(item)
+	}
+	fmt.Println(st)
 }

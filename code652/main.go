@@ -16,17 +16,15 @@ func findDuplicateSubtrees(root *treenode.TreeNode) (ret []*treenode.TreeNode) {
 			return "()"
 		}
 
-		left := parseFunc(n.Left)
-		right := parseFunc(n.Right)
-
 		subTree := strings.Join([]string{
-			fmt.Sprintf("(%d)", n.Val), left, right,
+			fmt.Sprintf("(%d)", n.Val),
+			parseFunc(n.Left),
+			parseFunc(n.Right),
 		}, "+")
 		pathMap[subTree] += 1
 		if pathMap[subTree] == 2 {
 			ret = append(ret, n)
 		}
-
 		return subTree
 	}
 	parseFunc(root)
