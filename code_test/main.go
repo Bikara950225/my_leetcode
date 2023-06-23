@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"math"
 	"math/rand"
 	treenode "my_leetcode/internal/tree_node"
@@ -108,10 +107,5 @@ func quickSort(src []int, b, e int) {
 }
 
 func main() {
-	s := "abc"
-	st := ""
-	for _, item := range s {
-		st += string(item)
-	}
-	fmt.Println(st)
+
 }
