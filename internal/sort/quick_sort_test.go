@@ -32,6 +32,14 @@ func TestQuickSort(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "test3",
+			args: args{
+				src: func() []int {
+					return []int{2, 2, 2, 1, 1}
+				},
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

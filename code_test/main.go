@@ -6,6 +6,7 @@ import (
 	"math/rand"
 	treenode "my_leetcode/internal/tree_node"
 	"reflect"
+	"sync"
 	"unsafe"
 )
 
@@ -106,6 +107,37 @@ func quickSort(src []int, b, e int) {
 	quickSort(src, i+1, e)
 }
 
-func main() {
+type ss string
 
+type ssi interface {
+	string | ss | int
+	comparable
+}
+
+func method[T ~string](src1, src2 T) bool {
+	return src1 == src2
+}
+
+type SyncMap[K comparable, V any] struct {
+	mutex sync.Mutex
+	cache map[K]V
+}
+
+func NewSyncMap[K1 comparable, V1 any]() *SyncMap[K1, V1] {
+	return &SyncMap[K1, V1]{
+		cache: make(map[K1]V1),
+	}
+}
+
+func (s *SyncMap[K, V]) Get(key K) (V, bool) {
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+
+	v, ok := s.cache[key]
+	return v, ok
+}
+
+func main() {
+	sm := NewSyncMap[string, int]()
+	sm.Get("123")
 }
