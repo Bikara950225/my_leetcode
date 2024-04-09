@@ -16,13 +16,14 @@ func main() {
 			},
 		},
 		Right: &treenode.TreeNode{
-			Val: 12,
-			Left: &treenode.TreeNode{Val: 11},
+			Val:   12,
+			Left:  &treenode.TreeNode{Val: 11},
 			Right: &treenode.TreeNode{Val: 13},
 		},
 	}
 
-	cc := &CodecPostorder{}
+	//cc := &CodecPostorder{}
+	cc := ConstructorPreorder2()
 	srcStr := cc.serialize(src)
 	fmt.Println(srcStr)
 

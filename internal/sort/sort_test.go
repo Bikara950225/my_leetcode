@@ -4,7 +4,7 @@ import (
 	"testing"
 )
 
-//go:generate go test --bench=Sort$ -benchmem .
+//go:generate go test --bench=Sort$ -benchmem -count=5 .
 
 var (
 	srcList []int

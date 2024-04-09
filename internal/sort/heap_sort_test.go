@@ -1,6 +1,8 @@
 package sort
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestHeapSort(t *testing.T) {
 	type args struct {

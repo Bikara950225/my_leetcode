@@ -11,8 +11,8 @@ func quickSort1(nums []int, b, e int) {
 		return
 	}
 
-	//randI := (rand.Int() % (e - b + 1)) + b
-	//nums[randI], nums[e] = nums[e], nums[randI]
+	randI := (rand.Int() % (e - b + 1)) + b
+	nums[randI], nums[e] = nums[e], nums[randI]
 	// 这里不随机抽样
 	mark := nums[e]
 
@@ -35,30 +35,20 @@ func quickSort2(nums []int, b, e int) {
 		return
 	}
 
-	// 随机抽样
-	rIdx := b + rand.Intn(e-b+1)
-	nums[e], nums[rIdx] = nums[rIdx], nums[e]
-	m := nums[e]
+	idx := (rand.Int() % (e - b + 1)) + b
+	mark := nums[idx]
+	nums[idx], nums[e] = nums[e], nums[idx]
 
 	i, j := b, b-1
-	ee := e
-	for ; i < ee; i++ {
-		if nums[i] < m {
+	for ; i < e; i++ {
+		if nums[i] <= mark {
 			j++
 			nums[i], nums[j] = nums[j], nums[i]
-		} else if nums[i] == m {
-			// 将与尾端相同的项放置到后面
-			ee--
-			nums[i], nums[ee] = nums[ee], nums[i]
 		}
 	}
+	j++
+	nums[j], nums[e] = nums[e], nums[j]
 
-	jj := j
-	for ; ee <= e; ee++ {
-		jj++
-		nums[jj], nums[ee] = nums[ee], nums[jj]
-	}
-
-	quickSort2(nums, b, j)
-	quickSort2(nums, jj+1, e)
+	quickSort2(nums, b, j-1)
+	quickSort2(nums, j+1, e)
 }

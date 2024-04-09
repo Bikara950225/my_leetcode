@@ -2,7 +2,12 @@ module my_leetcode
 
 go 1.18
 
-require github.com/satori/go.uuid v1.2.0
+require (
+	github.com/Masterminds/semver v1.5.0
+	github.com/pkg/errors v0.9.1
+	github.com/satori/go.uuid v1.2.0
+	golang.org/x/sys v0.13.0
+)
 
 require (
 	github.com/kr/pretty v0.3.0 // indirect
