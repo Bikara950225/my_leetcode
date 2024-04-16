@@ -34,6 +34,33 @@ func minSubArrayLen(target int, nums []int) int {
 	return ret
 }
 
+func minSubArrayLen2(target int, src []int) (ret int) {
+	i, j := 0, 0
+	sum := 0
+	for i < len(src) && j < len(src) {
+		sum += src[j]
+	gto:
+		if sum >= target {
+			l := j - i + 1
+			if l < ret || ret == 0 {
+				ret = l
+			}
+
+			sum -= src[i]
+			i++
+			if i > j {
+				j = i
+			} else {
+				goto gto
+			}
+
+		} else {
+			j++
+		}
+	}
+	return
+}
+
 // 只用了前缀和, 勉强可以过
 // 时间复杂度: O(N*logN)
 func minSubArrayLen1(target int, nums []int) int {
@@ -77,8 +104,13 @@ func minSubArrayLen1(target int, nums []int) int {
 }
 
 func main() {
-	ret1 := minSubArrayLen(7, []int{2, 3, 1, 2, 4, 3})
+	ret1 := minSubArrayLen2(7, []int{2, 3, 1, 2, 4, 3})
 	if ret1 != 2 {
 		panic(fmt.Errorf("code209 error: ret1 != 2: %d", ret1))
+	}
+
+	ret2 := minSubArrayLen2(4, []int{1, 4, 4, 4})
+	if ret2 != 1 {
+		panic(fmt.Errorf("code209 error: ret2 != 1: %d", ret2))
 	}
 }

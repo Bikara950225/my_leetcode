@@ -1,6 +1,6 @@
 module my_leetcode
 
-go 1.18
+go 1.22
 
 require (
 	github.com/Masterminds/semver v1.5.0

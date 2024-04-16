@@ -5,6 +5,9 @@ import (
 	fmt "fmt"
 	"io"
 	"net"
+	"reflect"
+	"strconv"
+	"strings"
 	"syscall"
 	"unsafe"
 )
@@ -125,35 +128,45 @@ func (s selfSliceString) String() string {
 	return string(bs)
 }
 
+func strToIp(ip string) uint32 {
+	ipSplit := strings.Split(ip, ".")
+	if len(ipSplit) != 4 {
+		panic("ff")
+	}
+	var ipInt uint32
+	for i, subIpStr := range ipSplit {
+		subIp, _ := strconv.ParseUint(subIpStr, 10, 32)
+		ipInt |= uint32(subIp) << (24 - 8*i)
+	}
+	return ipInt
+}
+
+func ipToStr(ip uint32) string {
+	byteH := reflect.SliceHeader{
+		Data: uintptr(unsafe.Pointer(&ip)),
+		Len:  4, Cap: 4,
+	}
+	bs := (*[]byte)(unsafe.Pointer(&byteH))
+	sb := strings.Builder{}
+	for i := len(*bs) - 1; i >= 0; i-- {
+		subIp := strconv.Itoa(int((*bs)[i]))
+		sb.WriteString(subIp)
+		if i != 0 {
+			sb.WriteString(".")
+		}
+	}
+	return sb.String()
+}
+
 func main() {
-	//rf, err := os.Open("/tmp/test1.log")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//defer rf.Close()
-	//
-	//iFd := rf.Fd()
-	//
-	//wf, err := os.OpenFile("/tmp/test2.log", os.O_CREATE|os.O_WRONLY, 0777)
-	//if err != nil {
-	//	panic(err)
-	//}
-	//defer wf.Close()
-	//wFd := wf.Fd()
-	//
-	//var ofs int64 = 0
-	//_, err = syscall.Sendfile(int(wFd), int(iFd), &ofs, 3)
-	//if err != nil {
-	//	panic(err)
-	//}
-	var i1 int8 = 100
-	var i2 int8 = 127
-	i1p := unsafe.Pointer(&i1)
-	i2p := unsafe.Pointer(uintptr(i1p) + 1)
-	//cpi2 := *(*int8)(unsafe.Pointer(i2p))
-	fmt.Println(unsafe.Pointer(&i2))
-	fmt.Println(i2p)
-	fmt.Println(*(*int8)(i2p))
+	ip1 := "172.30.0.57"
+	ip2 := "173.30.0.58"
+
+	fmt.Println(strToIp(ip1))
+	fmt.Println(strToIp(ip2))
+
+	fmt.Println(ipToStr(strToIp(ip1)))
+	fmt.Println(ipToStr(strToIp(ip2)))
 }
 
 type SessionStruct struct {

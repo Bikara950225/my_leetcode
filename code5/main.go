@@ -62,11 +62,49 @@ func longestPalindrome2(s string) (ret string) {
 	return
 }
 
+func method(src string) (ret string) {
+	dp := make([][]bool, len(src))
+	for i := 0; i < len(dp); i++ {
+		dp[i] = make([]bool, len(src))
+	}
+
+	for step := 0; step < len(src); step++ {
+		for i := 0; ; i++ {
+			j := i + step
+			if j >= len(src) {
+				break
+			}
+
+			if i == j {
+				dp[i][j] = true
+			} else if i+1 == j {
+				dp[i][j] = src[i] == src[j]
+			} else {
+				dp[i][j] = dp[i+1][j-1] && src[i] == src[j]
+			}
+
+			if dp[i][j] {
+				if j-i+1 > len(ret) {
+					ret = src[i : j+1]
+				}
+			}
+		}
+	}
+	return
+}
+
 func main() {
 	src := "babad"
 
 	ret := longestPalindrome2(src)
 	expectRet := "bab"
+	if ret != expectRet {
+		panic(fmt.Errorf("code5 error, not expect result: %s", ret))
+	}
+
+	src = "cbbd"
+	ret = longestPalindrome2(src)
+	expectRet = "bb"
 	if ret != expectRet {
 		panic(fmt.Errorf("code5 error, not expect result: %s", ret))
 	}

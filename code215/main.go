@@ -7,13 +7,13 @@ import (
 
 func findKthLargest(nums []int, k int) int {
 	for i := len(nums) >> 1; i >= 0; i-- {
-		maxHeap(nums, i, len(nums))
+		maxHeap2(nums, i, len(nums)-1)
 	}
 
 	for i := 0; i < k; {
 		nums[0], nums[len(nums)-1-i] = nums[len(nums)-1-i], nums[0]
 		i++
-		maxHeap(nums, 0, len(nums)-i)
+		maxHeap2(nums, 0, len(nums)-i-1)
 	}
 	return nums[len(nums)-k]
 }
@@ -38,6 +38,28 @@ func maxHeap(nums []int, b, e int) {
 			break
 		}
 	}
+}
+
+func maxHeap2(nums []int, b, e int) {
+	for b<<1+1 <= e {
+		largest := b
+		left := b<<1 + 1
+		if left <= e && nums[largest] < nums[left] {
+			largest = left
+		}
+		right := b<<1 + 2
+		if right <= e && nums[largest] < nums[right] {
+			largest = right
+		}
+
+		if largest != b {
+			nums[b], nums[largest] = nums[largest], nums[b]
+			b = largest
+		} else {
+			break
+		}
+	}
+
 }
 
 func main() {

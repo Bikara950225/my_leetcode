@@ -90,7 +90,7 @@ func main() {
 
 	src2_1 := QuickCreateListNode([]int{2, 4})
 	src2_2 := QuickCreateListNode([]int{1, 6, 5})
-	ret2 := addTwoNumbers2(src2_1, src2_2)
+	ret2 := bfs(src2_1, src2_2)
 	ret2List := ret2.GetList()
 	if !reflect.DeepEqual(ret2List, []int{3, 0, 6}) {
 		panic(fmt.Errorf("code2 error, not expect result: %+v", ret2List))

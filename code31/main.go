@@ -37,6 +37,28 @@ func reverse(nums []int, begin, end int) {
 	}
 }
 
+func nextPermutation2(src []int) {
+	downI := -1
+	for i := len(src) - 1; i > 0; i-- {
+		if src[i] > src[i-1] {
+			downI = i - 1
+			break
+		}
+	}
+	if downI == -1 {
+		reverse(src, 0, len(src)-1)
+		return
+	}
+
+	for i := len(src) - 1; i > downI; i-- {
+		if src[i] > src[downI] {
+			src[i], src[downI] = src[downI], src[i]
+			break
+		}
+	}
+	reverse(src, downI+1, len(src)-1)
+}
+
 func main() {
 	src1 := []int{3, 1, 2}
 	nextPermutation(src1)
@@ -46,7 +68,7 @@ func main() {
 	}
 
 	src2 := []int{3, 2, 1}
-	nextPermutation(src2)
+	nextPermutation2(src2)
 	expectRet2 := []int{1, 2, 3}
 	if !reflect.DeepEqual(src2, expectRet2) {
 		panic(fmt.Errorf("code31 error, not expect result: %+v", src2))

@@ -6,25 +6,24 @@ import (
 	"reflect"
 )
 
-var count = 0
-
 func removeNthFromEnd(head *listnode.ListNode, n int) *listnode.ListNode {
-	defer func() {
-		count = 0
-	}()
-	return dfs(head, n)
-}
+	count := 0
+	var dfs func(node *listnode.ListNode, n int) *listnode.ListNode
+	dfs = func(node *listnode.ListNode, n int) *listnode.ListNode {
+		if node == nil {
+			return nil
+		}
 
-func dfs(node *listnode.ListNode, n int) *listnode.ListNode {
-	if node == nil {
-		return node
+		next := dfs(node.Next, n)
+		count++
+		if count == n {
+			return next
+		} else {
+			node.Next = next
+			return node
+		}
 	}
-	node.Next = dfs(node.Next, n)
-	count += 1
-	if count == n {
-		return node.Next
-	}
-	return node
+	return dfs(head, n)
 }
 
 func main() {

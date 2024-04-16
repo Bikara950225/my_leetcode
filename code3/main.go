@@ -31,6 +31,29 @@ func lengthOfLongestSubstring(s string) int {
 	return ret
 }
 
+func method1(src string) (ret int) {
+	if src == "" {
+		return
+	}
+
+	m := map[string]struct{}{}
+	i, j := 0, 0
+	for i < len(src) && j < len(src) {
+		sub := string(src[j])
+		if _, ok := m[sub]; !ok {
+			m[sub] = struct{}{}
+			if len(m) > ret {
+				ret = len(m)
+			}
+			j++
+		} else {
+			delete(m, string(src[i]))
+			i++
+		}
+	}
+	return
+}
+
 func main() {
 	ret := lengthOfLongestSubstring("abcabcbb")
 	if ret != 3 {
