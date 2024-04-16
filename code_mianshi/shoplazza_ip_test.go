@@ -30,6 +30,11 @@ func Test_strIpV4ToNumber(t *testing.T) {
 				t.Errorf("strIpV4ToNumber() error: ipv4 != gotIpStr: %s != %s", gotIpStr, tt.args.ipv4)
 				return
 			}
+			gotIpStr2 := uint32ToStrIp2(got)
+			if gotIpStr2 != tt.args.ipv4 {
+				t.Errorf("strIpV4ToNumber() error: ipv4 != gotIpStr2: %s != %s", gotIpStr2, tt.args.ipv4)
+				return
+			}
 		})
 	}
 }

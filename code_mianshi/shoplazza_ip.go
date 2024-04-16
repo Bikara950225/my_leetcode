@@ -36,3 +36,17 @@ func uint32ToStrIp(ip uint32) string {
 	}
 	return sb.String()
 }
+
+func uint32ToStrIp2(ip uint32) string {
+	sb := strings.Builder{}
+	for i := range 4 {
+		offset := 24 - 8*i
+		sub := ip & (0xFF << offset)
+		sub >>= offset
+		sb.WriteString(strconv.Itoa(int(sub)))
+		if i < 3 {
+			sb.WriteString(".")
+		}
+	}
+	return sb.String()
+}
