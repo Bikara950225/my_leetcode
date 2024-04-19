@@ -125,9 +125,12 @@ func (s selfSliceString) String() string {
 }
 
 func main() {
-	for i := range 4 {
-		fmt.Println(i)
-	}
+	a, b := 1, 2
+	defer fmt.Println(a, b)
+	defer func() {
+		fmt.Println(a, b)
+	}()
+	a, b = 3, 4
 }
 
 type SessionStruct struct {
