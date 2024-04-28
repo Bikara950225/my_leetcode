@@ -23,9 +23,47 @@ func maxProfit(prices []int) int {
 	return sell2
 }
 
+func maxProfit2(prices []int) int {
+	if len(prices) <= 0 {
+		return 0
+	}
+	minDp := make([]int, len(prices))
+	minDp[0] = prices[0]
+	for i := 1; i < len(prices); i++ {
+		if prices[i] < minDp[i-1] {
+			minDp[i] = prices[i]
+		} else {
+			minDp[i] = minDp[i-1]
+		}
+	}
+	// 第一次卖出的Dp
+	oDp1 := make([]int, len(prices))
+	iDp2, oDp2 := make([]int, len(prices)), make([]int, len(prices))
+	for i := 1; i < len(prices); i++ {
+		oDp1[i] = max(oDp1[i-1], prices[i]-minDp[i])
+		if i >= 2 {
+			if i == 2 {
+				iDp2[i] = oDp1[i] - prices[i]
+			} else {
+				iDp2[i] = max(iDp2[i-1], oDp1[i]-prices[i])
+			}
+		}
+		if i >= 3 {
+			if i == 3 {
+				oDp2[i] = iDp2[i] + prices[i]
+			} else {
+				oDp2[i] = max(oDp2[i-1], iDp2[i]+prices[i])
+			}
+		}
+	}
+	e := len(prices) - 1
+	rr := []int{oDp1[e], oDp2[e]}
+	return max[int](1, rr...)
+}
+
 func main() {
 	src1 := []int{3, 3, 5, 0, 0, 3, 1, 4}
-	ret1 := maxProfit(src1)
+	ret1 := maxProfit2(src1)
 	if ret1 != 6 {
 		panic(fmt.Errorf("code123 case1 error, not expect result 6: %d", ret1))
 	}

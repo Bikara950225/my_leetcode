@@ -2,58 +2,75 @@ package main
 
 import (
 	"fmt"
-	listnode "my_leetcode/internal/list_node"
+	. "my_leetcode/internal/list_node"
 	"reflect"
 )
 
-// 将 [curr, end) 范围的节点进行反转
-func reverseLink(pre, curr *listnode.ListNode, end *listnode.ListNode) *listnode.ListNode {
+func reverse(pre, curr *ListNode, end *ListNode) *ListNode {
 	if curr == end {
 		return pre
 	}
-
 	currNext := curr.Next
 	curr.Next = pre
-
-	return reverseLink(curr, currNext, end)
+	return reverse(curr, currNext, end)
 }
 
-func reverseBetween(head *listnode.ListNode, left int, right int) *listnode.ListNode {
-	// 反转的起始节点
-	leftNode := head
-	for i := 0; i < left-1; i++ {
-		leftNode = leftNode.Next
-	}
-
-	// 这里找的是right指定的节点的下一个节点，这是反转的终止节点
-	endNode := head
-	for i := 0; i < right-1; i++ {
-		endNode = endNode.Next
-	}
-	// 因为 right 在设定上不会越界，所以 endNode = endNode.Next 不用做空指针判断
-	endNode = endNode.Next
-
-	reverseNode := reverseLink(endNode, leftNode, endNode)
-
-	// 拼接反转后的节点
-	if left-1 <= 0 {
-		// 如果开始反转的节点(left对应的节点）就是head，那么 left-1 必定小于等于 0
-		// 这时候不用做拼接，直接返回reverseNode即可
-		return reverseNode
-	} else {
-		leftPreNode := head
-		// 这里找的是开始反转的节点的前一个节点
-		for i := 0; i < left-1-1; i++ {
-			leftPreNode = leftPreNode.Next
+// 将 [curr, end) 范围的节点进行反转
+func reverseBetween(head *ListNode, left, right int) *ListNode {
+	find := func(p *ListNode, index int) *ListNode {
+		if index < 0 {
+			return nil
 		}
-		leftPreNode.Next = reverseNode
+		for i := 0; i < index; i++ {
+			if p == nil {
+				return nil
+			}
+			p = p.Next
+		}
+		return p
 	}
-	return head
+
+	leftPre := find(head, left-1-1)
+	rightNext := find(head, right-1+1)
+
+	if leftPre == nil {
+		return reverse(rightNext, head, rightNext)
+	} else {
+		leftPre.Next = reverse(rightNext, leftPre.Next, rightNext)
+		return head
+	}
+}
+
+func reverseBetween2(head *ListNode, left int, right int) *ListNode {
+	var cache []*ListNode
+	for head != nil {
+		cache = append(cache, head)
+		head = head.Next
+	}
+
+	reverseF := func(l []*ListNode) {
+		i, j := 0, len(l)-1
+		for i < j {
+			l[i], l[j] = l[j], l[i]
+			i++
+			j--
+		}
+	}
+	reverseF(cache[left-1 : right])
+
+	dh := ListNode{}
+	dhp := &dh
+	for _, n := range cache {
+		n.Next = nil
+		dhp.Next = n
+		dhp = dhp.Next
+	}
+	return dh.Next
 }
 
 func main() {
 	// 反转子链的场景
-	link1 := listnode.QuickCreateListNode([]int{
+	link1 := QuickCreateListNode([]int{
 		1, 2, 3, 4, 5,
 	})
 	newLink1 := reverseBetween(link1, 2, 4)
@@ -66,7 +83,7 @@ func main() {
 	}
 
 	// 反转头尾的场景
-	link2 := listnode.QuickCreateListNode([]int{
+	link2 := QuickCreateListNode([]int{
 		3, 5,
 	})
 	newLink2 := reverseBetween(link2, 1, 2)

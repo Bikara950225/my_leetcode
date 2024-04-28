@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	fmt "fmt"
 	"io"
 	"net"
@@ -84,53 +83,18 @@ func start2(addr string) {
 	}
 }
 
-type ss struct {
-	num int
+type selfErr struct {
+	count int
 }
 
-func (s *ss) method17() {
-	fmt.Println(s.num)
-}
-
-type Node struct {
-	Val any
-	Sub []*Node
-}
-
-type Tree struct {
-	Root *Node
-}
-
-type MM map[string]any
-
-type ParseText struct {
-	MM
-	Name string
-	Age  int
-}
-
-type selfSlice[T any] []T
-
-func (s selfSlice[T]) String() string {
-	bs, _ := json.Marshal(s)
-	sws := string(bs)
-	return sws
-}
-
-type selfSliceString []string
-
-func (s selfSliceString) String() string {
-	bs, _ := json.Marshal(s)
-	return string(bs)
+func (s selfErr) Error() string {
+	s.count++
+	return "123"
 }
 
 func main() {
-	a, b := 1, 2
-	defer fmt.Println(a, b)
-	defer func() {
-		fmt.Println(a, b)
-	}()
-	a, b = 3, 4
+	il := []int{}
+	fmt.Println(il[1:])
 }
 
 type SessionStruct struct {

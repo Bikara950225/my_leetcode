@@ -31,32 +31,36 @@ func lengthOfLongestSubstring(s string) int {
 	return ret
 }
 
-func method1(src string) (ret int) {
-	if src == "" {
+func lengthOfLongestSubstring2(src string) (ret int) {
+	if len(src) <= 0 {
 		return
 	}
-
-	m := map[string]struct{}{}
 	i, j := 0, 0
-	for i < len(src) && j < len(src) {
-		sub := string(src[j])
-		if _, ok := m[sub]; !ok {
-			m[sub] = struct{}{}
-			if len(m) > ret {
-				ret = len(m)
-			}
+	m := map[byte]struct{}{}
+	for j < len(src) {
+		if _, ok := m[src[j]]; !ok {
+			m[src[j]] = struct{}{}
 			j++
+			if j-i > ret {
+				ret = j - i
+			}
 		} else {
-			delete(m, string(src[i]))
+			delete(m, src[i])
 			i++
 		}
 	}
+
 	return
 }
 
 func main() {
-	ret := lengthOfLongestSubstring("abcabcbb")
+	ret := lengthOfLongestSubstring2("abcabcbb")
 	if ret != 3 {
 		panic(fmt.Errorf("%s error", "abcabcbb"))
+	}
+
+	ret = lengthOfLongestSubstring2("bbbbb")
+	if ret != 1 {
+		panic(fmt.Errorf("%s error", "bbbbb"))
 	}
 }

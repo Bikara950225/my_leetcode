@@ -19,3 +19,23 @@ func method() {
 	ch <- struct{}{}
 	fn("B", 50)
 }
+
+func method2() {
+	ch1 := make(chan struct{}, 1)
+	ch2 := make(chan struct{}, 1)
+
+	go func(n int) {
+		for i := 0; i < n; i++ {
+			<-ch1
+			fmt.Println("A")
+			ch2 <- struct{}{}
+		}
+	}(50)
+
+	ch1 <- struct{}{}
+	for i := 0; i < 50; i++ {
+		<-ch2
+		fmt.Println("B")
+		ch1 <- struct{}{}
+	}
+}

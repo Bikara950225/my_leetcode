@@ -45,6 +45,56 @@ func numIslands(grid [][]byte) int {
 	return ret
 }
 
+func numIslands2(grid [][]byte) (ret int) {
+	if len(grid) <= 0 {
+		return
+	}
+
+	yl := len(grid)
+	xl := len(grid[0])
+
+	m := make([][]int, yl)
+	for i := range m {
+		m[i] = make([]int, xl)
+	}
+
+	var fs func(y, x int)
+	fs = func(y, x int) {
+		// 先校验下标，不要超出范围
+		if y < 0 || y >= yl {
+			return
+		}
+		if x < 0 || x >= xl {
+			return
+		}
+		// 再校验m缓存，被感染过就不要感染
+		if m[y][x] == 1 {
+			return
+		}
+		if grid[y][x] == '0' {
+			return
+		}
+
+		// 标记感染
+		m[y][x] = 1
+		fs(y-1, x)
+		fs(y+1, x)
+		fs(y, x-1)
+		fs(y, x+1)
+	}
+
+	for y := 0; y < yl; y++ {
+		for x := 0; x < xl; x++ {
+			if grid[y][x] == '1' && m[y][x] == 0 {
+				ret++
+				// 感染
+				fs(y, x)
+			}
+		}
+	}
+	return
+}
+
 func main() {
 	grid := [][]byte{
 		{'1', '1', '1', '1', '0'},
@@ -53,7 +103,7 @@ func main() {
 		{'0', '0', '0', '0', '0'},
 	}
 
-	ret := numIslands(grid)
+	ret := numIslands2(grid)
 	expectRet := 1
 	if ret != expectRet {
 		panic(fmt.Errorf("code200 error, not expect result: %v", ret))

@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"container/list"
+	"fmt"
+)
 
 func lengthOfLIS(nums []int) int {
 	if len(nums) <= 0 {
@@ -44,4 +47,6 @@ func main() {
 	if ret != expectRet {
 		panic(fmt.Errorf("code300 error, not expect result: %d != %d", ret, expectRet))
 	}
+
+	list.New()
 }
