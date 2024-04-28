@@ -6,7 +6,7 @@ import (
 
 func Test_LRUCache(t *testing.T) {
 	t.Run("case1", func(t *testing.T) {
-		cache := Constructor(2)
+		cache := ConstructorLRUCache(2)
 
 		cache.Put(1, 1)
 		cache.Put(2, 2)
@@ -40,7 +40,7 @@ func Test_LRUCache(t *testing.T) {
 	})
 
 	t.Run("case21", func(t *testing.T) {
-		cache := Constructor(1)
+		cache := ConstructorLRUCache(1)
 		cache.Get(6)
 		cache.Get(8)
 		cache.Put(12, 1)

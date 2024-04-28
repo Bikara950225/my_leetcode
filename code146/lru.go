@@ -1,7 +1,7 @@
 package main
 
 // Least Recently Used
-type LRUCache struct {
+type LRUCache1 struct {
 	cap int
 
 	cache map[int]*DoubleLinkNode
@@ -10,8 +10,8 @@ type LRUCache struct {
 	tail *DoubleLinkNode
 }
 
-func Constructor(capacity int) LRUCache {
-	return LRUCache{
+func ConstructorLRUCache(capacity int) LRUCache1 {
+	return LRUCache1{
 		cap:   capacity,
 		cache: make(map[int]*DoubleLinkNode, capacity),
 		head:  nil,
@@ -19,7 +19,7 @@ func Constructor(capacity int) LRUCache {
 	}
 }
 
-func (s *LRUCache) Get(key int) int {
+func (s *LRUCache1) Get(key int) int {
 	node, ok := s.cache[key]
 	if !ok {
 		return -1
@@ -30,7 +30,7 @@ func (s *LRUCache) Get(key int) int {
 	return node.val
 }
 
-func (s *LRUCache) Put(key int, value int) {
+func (s *LRUCache1) Put(key int, value int) {
 	putNode, ok := s.cache[key]
 	if ok {
 		putNode.val = value
@@ -48,7 +48,7 @@ func (s *LRUCache) Put(key int, value int) {
 	}
 }
 
-func (s *LRUCache) updateRecentCache(newNode *DoubleLinkNode) {
+func (s *LRUCache1) updateRecentCache(newNode *DoubleLinkNode) {
 	newHead, newTail := setTop(s.head, newNode)
 	if newHead != nil {
 		s.head = newHead
