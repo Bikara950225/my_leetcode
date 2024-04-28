@@ -18,6 +18,8 @@ func rev(pre, curr *listnode.ListNode, end *listnode.ListNode) *listnode.ListNod
 }
 
 func reverseKGroup(head *listnode.ListNode, k int) *listnode.ListNode {
+	ll := []**int{}
+
 	var dfs func(mark, curr *listnode.ListNode, count, k int) *listnode.ListNode
 	dfs = func(mark, curr *listnode.ListNode, count, k int) *listnode.ListNode {
 		if curr == nil {

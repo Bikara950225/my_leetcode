@@ -8,22 +8,19 @@ import (
 
 func removeNthFromEnd(head *listnode.ListNode, n int) *listnode.ListNode {
 	count := 0
-	var dfs func(node *listnode.ListNode, n int) *listnode.ListNode
-	dfs = func(node *listnode.ListNode, n int) *listnode.ListNode {
+	var dfs func(node *listnode.ListNode) *listnode.ListNode
+	dfs = func(node *listnode.ListNode) *listnode.ListNode {
 		if node == nil {
 			return nil
 		}
-
-		next := dfs(node.Next, n)
+		node.Next = dfs(node.Next)
 		count++
 		if count == n {
-			return next
-		} else {
-			node.Next = next
-			return node
+			return node.Next
 		}
+		return node
 	}
-	return dfs(head, n)
+	return dfs(head)
 }
 
 func main() {
