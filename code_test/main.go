@@ -5,6 +5,7 @@ import (
 	"io"
 	"net"
 	"syscall"
+	"time"
 )
 
 func methodErr() (err error) {
@@ -93,8 +94,8 @@ func (s selfErr) Error() string {
 }
 
 func main() {
-	il := []int{}
-	fmt.Println(il[1:])
+	t1 := time.UnixMilli(1711700623410)
+	fmt.Println(t1.Format("2006-01-02 15:04:05"))
 }
 
 type SessionStruct struct {
