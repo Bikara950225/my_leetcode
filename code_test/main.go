@@ -94,8 +94,10 @@ func (s selfErr) Error() string {
 }
 
 func main() {
-	t1 := time.UnixMilli(1711700623410)
-	fmt.Println(t1.Format("2006-01-02 15:04:05"))
+	for _, item := range []int64{1711700623410, 1714379022410} {
+		t1 := time.UnixMilli(item)
+		fmt.Println(t1.Format("2006-01-02 15:04:05"))
+	}
 }
 
 type SessionStruct struct {
