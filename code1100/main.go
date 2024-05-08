@@ -19,7 +19,6 @@ func numKLenSubstrNoRepeats(s string, k int) (ret int) {
 			qi++
 		}
 	}
-
 	return
 }
 
