@@ -39,3 +39,21 @@ func method2() {
 		ch1 <- struct{}{}
 	}
 }
+
+func doubleGoroutine() {
+	ch := make(chan struct{})
+	ff := func(content string, n int) {
+		for range n {
+			<-ch
+			fmt.Println(content)
+			ch <- struct{}{}
+		}
+		if _, ok := <-ch; ok {
+			close(ch)
+		}
+	}
+	go ff("A", 50)
+
+	ch <- struct{}{}
+	ff("B", 50)
+}

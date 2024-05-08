@@ -4,6 +4,7 @@ import (
 	fmt "fmt"
 	"io"
 	"net"
+	"net/textproto"
 	"syscall"
 	"time"
 )
@@ -94,6 +95,11 @@ func (s selfErr) Error() string {
 }
 
 func main() {
+	fmt.Println(textproto.CanonicalMIMEHeaderKey("uSER"))
+	fmt.Println(textproto.CanonicalMIMEHeaderKey("org"))
+	fmt.Println(textproto.CanonicalMIMEHeaderKey("content-type"))
+	fmt.Println(textproto.CanonicalMIMEHeaderKey("fuck_uwin"))
+
 	for _, item := range []int64{1711700623410, 1714379022410} {
 		t1 := time.UnixMilli(item)
 		fmt.Println(t1.Format("2006-01-02 15:04:05"))
