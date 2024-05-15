@@ -1,10 +1,13 @@
 package main
 
 import (
+	"bytes"
+	"context"
 	fmt "fmt"
 	"io"
 	"net"
-	"net/textproto"
+	"net/http"
+	"os"
 	"syscall"
 	"time"
 )
@@ -94,16 +97,50 @@ func (s selfErr) Error() string {
 	return "123"
 }
 
-func main() {
-	fmt.Println(textproto.CanonicalMIMEHeaderKey("uSER"))
-	fmt.Println(textproto.CanonicalMIMEHeaderKey("org"))
-	fmt.Println(textproto.CanonicalMIMEHeaderKey("content-type"))
-	fmt.Println(textproto.CanonicalMIMEHeaderKey("fuck_uwin"))
+const bodyStr = `{
+  "query": {},
+  "fields": ["instanceId"],
+  "page": 1,
+  "page_size": 1
+}`
 
-	for _, item := range []int64{1711700623410, 1714379022410} {
-		t1 := time.UnixMilli(item)
-		fmt.Println(t1.Format("2006-01-02 15:04:05"))
+func main() {
+	selfDialContextFunc := func(ctx context.Context, network, addr string) (net.Conn, error) {
+		dial := net.Dialer{
+			Timeout:   30 * time.Second,
+			KeepAlive: 30 * time.Second,
+		}
+		return dial.Dial(network, addr)
 	}
+
+	httpCli := http.DefaultClient
+	httpCli.Transport = &http.Transport{
+		DialContext: selfDialContextFunc,
+	}
+
+	for range 3 {
+		go func() {
+			for {
+				body := bytes.NewReader([]byte(bodyStr))
+				url := fmt.Sprintf("http://sit.easyops.local:8079/v3/object/APP/instance/_search")
+				req, err := http.NewRequest("POST", url, body)
+				if err != nil {
+					panic(err)
+				}
+
+				resp, err := httpCli.Do(req)
+				if err != nil {
+					panic(err)
+				}
+				io.Copy(os.Stdout, resp.Body)
+				fmt.Println()
+				resp.Body.Close()
+				time.Sleep(2 * time.Second)
+			}
+		}()
+	}
+	var ch chan struct{}
+	<-ch
 }
 
 type SessionStruct struct {

@@ -2,59 +2,47 @@ package main
 
 import (
 	"fmt"
-	"my_leetcode/internal/empty"
 	"reflect"
 )
 
-var (
-	ret [][]int
-	sub []int
-	mark = map[int]empty.Empty{}
-)
+func permute(nums []int) (ret [][]int) {
+	mark := map[int]struct{}{}
+	subRet := make([]int, 0, len(nums))
 
-func permute(nums []int) [][]int {
-	handle(nums)
-
-	return ret
-}
-
-func handle(nums []int) {
-	if len(sub) == len(nums) {
-		copySub := make([]int, len(sub))
-		copy(copySub, sub)
-		ret = append(ret, copySub)
-	}
-
-	for _, item := range nums {
-		if _, ok := mark[item]; ok {
-			continue
+	var ff func()
+	ff = func() {
+		if len(subRet) == len(nums) {
+			cpRet := make([]int, len(subRet))
+			copy(cpRet, subRet)
+			ret = append(ret, cpRet)
+			return
 		}
 
-		sub = append(sub, item)
-		mark[item] = empty.Empty{}
+		for i, num := range nums {
+			if _, ok := mark[i]; ok {
+				continue
+			}
 
-		handle(nums)
-
-		sub = sub[:len(sub)-1]
-		delete(mark, item)
+			subRet = append(subRet, num)
+			mark[i] = struct{}{}
+			ff()
+			subRet = subRet[:len(subRet)-1]
+			delete(mark, i)
+		}
 	}
+	ff()
+	return
 }
 
 func main() {
-	defer func(){
-		ret = nil
-		sub = nil
-		mark = map[int]empty.Empty{}
-	}()
-
 	getRet := permute([]int{1, 2, 3})
 	expectRet := [][]int{
-		{1,2,3},
-		{1,3,2},
-		{2,1,3},
-		{2,3,1},
-		{3,1,2},
-		{3,2,1},
+		{1, 2, 3},
+		{1, 3, 2},
+		{2, 1, 3},
+		{2, 3, 1},
+		{3, 1, 2},
+		{3, 2, 1},
 	}
 	if !reflect.DeepEqual(getRet, expectRet) {
 		panic(fmt.Errorf("code46 error: not expect result: \n%+v", getRet))

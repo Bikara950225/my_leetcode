@@ -2,52 +2,48 @@ package main
 
 import (
 	"fmt"
-	treenode "my_leetcode/internal/tree_node"
+	. "my_leetcode/internal/tree_node"
 	"reflect"
 )
 
-func rightSideView(root *treenode.TreeNode) []int {
+func rightSideView(root *TreeNode) (ret []int) {
 	if root == nil {
-		return nil
+		return
 	}
 
-	var ret []int
-	nodeQueue := []*treenode.TreeNode{
-		root,
-	}
-	for len(nodeQueue) > 0 {
-		layoutSize := len(nodeQueue)
-		var targetNode *treenode.TreeNode
-		for i := 0; i < layoutSize; i++ {
-			targetNode = nodeQueue[0]
-			nodeQueue = nodeQueue[1:]
-
-			if targetNode.Left != nil {
-				nodeQueue = append(nodeQueue, targetNode.Left)
-			}
-			if targetNode.Right != nil {
-				nodeQueue = append(nodeQueue, targetNode.Right)
+	q := []*TreeNode{root}
+	for len(q) > 0 {
+		ql := len(q)
+		for i, curr := range q {
+			if curr != nil {
+				if i+1 == ql {
+					ret = append(ret, curr.Val)
+				}
+				if curr.Left != nil {
+					q = append(q, curr.Left)
+				}
+				if curr.Right != nil {
+					q = append(q, curr.Right)
+				}
 			}
 		}
-		if targetNode != nil {
-			ret = append(ret, targetNode.Val)
-		}
+		q = q[ql:]
 	}
-	return ret
+	return
 }
 
 func main() {
-	srcTree := &treenode.TreeNode{
+	srcTree := &TreeNode{
 		Val: 1,
-		Left: &treenode.TreeNode{
+		Left: &TreeNode{
 			Val: 2,
-			Right: &treenode.TreeNode{
+			Right: &TreeNode{
 				Val: 5,
 			},
 		},
-		Right: &treenode.TreeNode{
+		Right: &TreeNode{
 			Val: 3,
-			Right: &treenode.TreeNode{
+			Right: &TreeNode{
 				Val: 4,
 			},
 		},
