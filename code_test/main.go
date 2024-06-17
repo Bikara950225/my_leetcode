@@ -1,15 +1,12 @@
 package main
 
 import (
-	"bytes"
-	"context"
+	_ "embed"
 	fmt "fmt"
+	"github.com/google/btree"
 	"io"
 	"net"
-	"net/http"
-	"os"
 	"syscall"
-	"time"
 )
 
 func methodErr() (err error) {
@@ -97,50 +94,29 @@ func (s selfErr) Error() string {
 	return "123"
 }
 
-const bodyStr = `{
-  "query": {},
-  "fields": ["instanceId"],
-  "page": 1,
-  "page_size": 1
-}`
+var helloFile []byte
+
+type entry struct {
+	id  int
+	val string
+}
 
 func main() {
-	selfDialContextFunc := func(ctx context.Context, network, addr string) (net.Conn, error) {
-		dial := net.Dialer{
-			Timeout:   30 * time.Second,
-			KeepAlive: 30 * time.Second,
-		}
-		return dial.Dial(network, addr)
+	bTree := btree.NewG(10, func(a, b *entry) bool {
+		return a.id < b.id
+	})
+	for i := range 100 {
+		bTree.ReplaceOrInsert(&entry{
+			id: i, val: fmt.Sprintf("val%d", i),
+		})
 	}
 
-	httpCli := http.DefaultClient
-	httpCli.Transport = &http.Transport{
-		DialContext: selfDialContextFunc,
-	}
-
-	for range 3 {
-		go func() {
-			for {
-				body := bytes.NewReader([]byte(bodyStr))
-				url := fmt.Sprintf("http://sit.easyops.local:8079/v3/object/APP/instance/_search")
-				req, err := http.NewRequest("POST", url, body)
-				if err != nil {
-					panic(err)
-				}
-
-				resp, err := httpCli.Do(req)
-				if err != nil {
-					panic(err)
-				}
-				io.Copy(os.Stdout, resp.Body)
-				fmt.Println()
-				resp.Body.Close()
-				time.Sleep(2 * time.Second)
-			}
-		}()
-	}
-	var ch chan struct{}
-	<-ch
+	fmt.Println(bTree.Len())
+	fmt.Println(bTree.Get(&entry{id: 50}))
+	bTree.AscendRange(&entry{id: 49}, &entry{id: 100}, func(item *entry) bool {
+		fmt.Println(item)
+		return true
+	})
 }
 
 type SessionStruct struct {

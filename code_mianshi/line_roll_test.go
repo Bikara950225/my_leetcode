@@ -10,7 +10,12 @@ func TestPrintMsg(t *testing.T) {
 		name string
 		args args
 	}{
-		// TODO: Add test cases.
+		{
+			name: "happy path",
+			args: args{
+				msg: "hello",
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

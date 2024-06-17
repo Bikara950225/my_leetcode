@@ -6,6 +6,20 @@ import (
 	"sort"
 )
 
+//func findDuplicates(nums []int) (ret []int) {
+//	for i := range nums {
+//		for nums[i] != nums[nums[i]-1] {
+//			nums[i], nums[nums[i]-1] = nums[nums[i]-1], nums[i]
+//		}
+//	}
+//	for i, num := range nums {
+//		if num-1 != i {
+//			ret = append(ret, num)
+//		}
+//	}
+//	return
+//}
+
 func findDuplicates(nums []int) (ret []int) {
 	for i := range nums {
 		for nums[i] != nums[nums[i]-1] {
@@ -13,7 +27,7 @@ func findDuplicates(nums []int) (ret []int) {
 		}
 	}
 	for i, num := range nums {
-		if num-1 != i {
+		if i+1 != num {
 			ret = append(ret, num)
 		}
 	}

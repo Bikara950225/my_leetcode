@@ -3,10 +3,9 @@ module my_leetcode
 go 1.22
 
 require (
-	github.com/Masterminds/semver v1.5.0
-	github.com/pkg/errors v0.9.1
+	github.com/emirpasic/gods/v2 v2.0.0-alpha
+	github.com/google/btree v1.1.2
 	github.com/satori/go.uuid v1.2.0
-	golang.org/x/sys v0.13.0
 )
 
 require (

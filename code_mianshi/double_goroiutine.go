@@ -42,10 +42,10 @@ func method2() {
 
 func doubleGoroutine() {
 	ch := make(chan struct{})
-	ff := func(content string, n int) {
+	ff := func(c string, n int) {
 		for range n {
 			<-ch
-			fmt.Println(content)
+			fmt.Println(c)
 			ch <- struct{}{}
 		}
 		if _, ok := <-ch; ok {

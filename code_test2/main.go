@@ -6,7 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"path/filepath"
+	"sync"
 	"time"
 )
 
@@ -61,7 +61,7 @@ func dropCR(data []byte) []byte {
 }
 
 func main() {
-	ss := "/api/v1/objectStore/bucket/ai-center/object/来自easyjob-平台原生api使用原理1715607824236296923.docx"
-	fileName := filepath.Base(ss)
-	fmt.Println(filepath.Ext(fileName))
+	var mm sync.Map
+	mm.Store("123", "321")
+	fmt.Println(mm.Load("123"))
 }
