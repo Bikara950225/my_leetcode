@@ -63,13 +63,23 @@ func bTreeMapSparseIndexDemo() {
 			sparseIdx.ReplaceOrInsert(e)
 		}
 	}
-	findEntry := &entry{id: 49}
+
+	find := 549
 	//sparseIdx.AscendGreaterOrEqual(findEntry, func(item *entry) bool {
 	//	fmt.Println(item)
 	//	return true
 	//})
-	sparseIdx.AscendRange(findEntry, &entry{id: 50}, func(item *entry) bool {
-		fmt.Println(item)
+	var targetStart *entry
+	sparseIdx.AscendLessThan(&entry{id: find + 1}, func(item *entry) bool {
+		targetStart = item
 		return true
 	})
+
+	idx := targetStart.id
+	for ; idx <= find; idx++ {
+		if mainData[idx].id == find {
+			fmt.Println("find")
+		}
+	}
+	fmt.Println("not found")
 }

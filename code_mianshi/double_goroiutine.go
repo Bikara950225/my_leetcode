@@ -2,58 +2,42 @@ package code_mianshi
 
 import "fmt"
 
-func method() {
+func doubleG() {
 	ch := make(chan struct{})
 
-	fn := func(r string, n int) {
-		for i := 0; i < n; i++ {
+	var ff = func(n int, content string) {
+		for range n {
 			<-ch
-			fmt.Println(r)
+			fmt.Println(content)
 			ch <- struct{}{}
 		}
 		if _, ok := <-ch; ok {
 			close(ch)
 		}
 	}
-	go fn("A", 50)
+
+	go ff(50, "A")
+
 	ch <- struct{}{}
-	fn("B", 50)
+	ff(50, "B")
 }
 
-func method2() {
+func doubleG2() {
 	ch1 := make(chan struct{}, 1)
 	ch2 := make(chan struct{}, 1)
 
-	go func(n int) {
-		for i := 0; i < n; i++ {
+	go func() {
+		for i := range 50 {
 			<-ch1
-			fmt.Println("A")
+			fmt.Printf("[%d]A\n", i)
 			ch2 <- struct{}{}
 		}
-	}(50)
+	}()
 
 	ch1 <- struct{}{}
-	for i := 0; i < 50; i++ {
+	for i := range 50 {
 		<-ch2
-		fmt.Println("B")
+		fmt.Printf("[%d]B\n", i)
 		ch1 <- struct{}{}
 	}
-}
-
-func doubleGoroutine() {
-	ch := make(chan struct{})
-	ff := func(c string, n int) {
-		for range n {
-			<-ch
-			fmt.Println(c)
-			ch <- struct{}{}
-		}
-		if _, ok := <-ch; ok {
-			close(ch)
-		}
-	}
-	go ff("A", 50)
-
-	ch <- struct{}{}
-	ff("B", 50)
 }

@@ -2,7 +2,7 @@ package code_mianshi
 
 import "testing"
 
-func Test_method(t *testing.T) {
+func Test_doubleG(t *testing.T) {
 	tests := []struct {
 		name string
 	}{
@@ -12,22 +12,7 @@ func Test_method(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			doubleGoroutine()
-		})
-	}
-}
-
-func Test_method2(t *testing.T) {
-	tests := []struct {
-		name string
-	}{
-		{
-			name: "happy path",
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			method2()
+			doubleG2()
 		})
 	}
 }
