@@ -3,59 +3,56 @@ package main
 import "fmt"
 
 func nextGreaterElement(n int) int {
-	src := []int{}
+	// n to slice
 	nn := n
+	var nl []uint8
 	for nn > 0 {
-		src = append(src, nn%10)
+		nl = append(nl, uint8(nn%10))
 		nn /= 10
 	}
-	reserve(src)
+	reverse(nl)
 
-	downIdx := -1
-	for i := len(src) - 1; i > 0; i-- {
-		if src[i] > src[i-1] {
-			downIdx = i - 1
+	downI := -1
+	for i := len(nl) - 1; i > 0; i-- {
+		if nl[i] > nl[i-1] {
+			downI = i - 1
 			break
 		}
 	}
-	if downIdx < 0 {
+	if downI == -1 {
 		return -1
 	}
 
-	for i := len(src) - 1; i > downIdx; i-- {
-		if src[i] > src[downIdx] {
-			src[i], src[downIdx] = src[downIdx], src[i]
+	for i := len(nl) - 1; i > downI; i-- {
+		if nl[i] > nl[downI] {
+			nl[i], nl[downI] = nl[downI], nl[i]
 			break
 		}
 	}
-	reserve(src[downIdx+1:])
+	reverse(nl[downI+1:])
 
-	return recover(src, int32(n))
+	return recoverNum(nl)
 }
 
-func recover(src []int, n int32) int {
-	var ret int32
-	for i, item := range src {
-		if i == 0 {
-			ret = int32(item)
-		} else {
-			ret = 10*ret + int32(item)
-		}
-	}
-
-	if ret < n {
-		return -1
-	}
-	return int(ret)
-}
-
-func reserve(src []int) {
+func reverse(src []uint8) {
 	i, j := 0, len(src)-1
 	for i < j {
 		src[i], src[j] = src[j], src[i]
 		i++
 		j--
 	}
+}
+
+func recoverNum(nl []uint8) (ret int) {
+	if len(nl) <= 0 {
+		return
+	}
+
+	ret = int(nl[0])
+	for _, item := range nl[1:] {
+		ret = 10*ret + int(item)
+	}
+	return
 }
 
 func main() {
