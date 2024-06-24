@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 func nextGreaterElement(n int) int {
 	// n to slice
@@ -10,26 +13,26 @@ func nextGreaterElement(n int) int {
 		nl = append(nl, uint8(nn%10))
 		nn /= 10
 	}
-	reverse(nl)
+	// nl为小端
 
-	downI := -1
-	for i := len(nl) - 1; i > 0; i-- {
-		if nl[i] > nl[i-1] {
-			downI = i - 1
+	di := -1
+	for i := 0; i < len(nl)-1; i++ {
+		if nl[i] > nl[i+1] {
+			di = i + 1
 			break
 		}
 	}
-	if downI == -1 {
+	if di == -1 {
 		return -1
 	}
 
-	for i := len(nl) - 1; i > downI; i-- {
-		if nl[i] > nl[downI] {
-			nl[i], nl[downI] = nl[downI], nl[i]
+	for i := 0; i < di; i++ {
+		if nl[i] > nl[di] {
+			nl[i], nl[di] = nl[di], nl[i]
 			break
 		}
 	}
-	reverse(nl[downI+1:])
+	reverse(nl[:di])
 
 	return recoverNum(nl)
 }
@@ -44,13 +47,21 @@ func reverse(src []uint8) {
 }
 
 func recoverNum(nl []uint8) (ret int) {
-	if len(nl) <= 0 {
-		return
+	if len(nl) < 0 {
+		return -1
 	}
 
-	ret = int(nl[0])
-	for _, item := range nl[1:] {
-		ret = 10*ret + int(item)
+	for i, item := range nl {
+		ret += int(math.Pow(10, float64(i))) * int(item)
+	}
+
+	//ret = int(nl[len(nl)-1])
+	//for i := len(nl) - 2; i >= 0; i-- {
+	//	ret = 10*ret + int(nl[i])
+	//}
+
+	if ret > int(int32(ret)) {
+		return -1
 	}
 	return
 }
