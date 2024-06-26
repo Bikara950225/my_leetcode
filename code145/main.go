@@ -2,45 +2,40 @@ package main
 
 import (
 	"fmt"
-	treenode "my_leetcode/internal/tree_node"
+	. "my_leetcode/internal/tree_node"
 	"reflect"
 )
 
-func postorderTraversal(root *treenode.TreeNode) []int {
+func postorderTraversal(root *TreeNode) []int {
 	return bfs(root)
 }
 
-func bfs(node *treenode.TreeNode) []int {
+func bfs(node *TreeNode) (ret []int) {
 	if node == nil {
-		return nil
+		return
 	}
 
-	var ret []int
-	var nodeStack []*treenode.TreeNode
-	// 用于记录前一个加入到ret的节点的指针
-	var preInsertNode *treenode.TreeNode
-	for node != nil || len(nodeStack) > 0 {
+	var stack []*TreeNode
+	var mark *TreeNode
+	for len(stack) > 0 || node != nil {
 		for node != nil {
-			nodeStack = append(nodeStack, node)
+			stack = append(stack, node)
 			node = node.Left
 		}
 
-		node = nodeStack[len(nodeStack)-1]
-		if node.Right != nil && node.Right != preInsertNode {
-			node = node.Right
+		popNode := stack[len(stack)-1]
+		if popNode.Right != nil && popNode.Right != mark {
+			node = popNode.Right
 		} else {
-			// 出栈
-			nodeStack = nodeStack[:len(nodeStack)-1]
-			// 将当前节点的值加入到返回结果中；并且把这个节点的指针用 preInsertNode 记录
-			ret = append(ret, node.Val)
-			preInsertNode = node
-			node = nil
+			stack = stack[:len(stack)-1]
+			ret = append(ret, popNode.Val)
+			mark = popNode
 		}
 	}
-	return ret
+	return
 }
 
-func dfs(node *treenode.TreeNode, ret *[]int) {
+func dfs(node *TreeNode, ret *[]int) {
 	if node == nil {
 		return
 	}
@@ -51,14 +46,14 @@ func dfs(node *treenode.TreeNode, ret *[]int) {
 }
 
 func main() {
-	srcTree := &treenode.TreeNode{
+	srcTree := &TreeNode{
 		Val: 1,
-		Left: &treenode.TreeNode{
+		Left: &TreeNode{
 			Val: 2,
-			Left: &treenode.TreeNode{
+			Left: &TreeNode{
 				Val: 3,
 			},
-			Right: &treenode.TreeNode{
+			Right: &TreeNode{
 				Val: 4,
 			},
 		},

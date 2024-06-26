@@ -2,39 +2,37 @@ package main
 
 import (
 	"fmt"
-	treenode "my_leetcode/internal/tree_node"
+	. "my_leetcode/internal/tree_node"
 	"reflect"
 )
 
-func preorderTraversal(root *treenode.TreeNode) []int {
+func preorderTraversal(root *TreeNode) []int {
 	return bfs(root)
 }
 
 // 广度优先遍历
-func bfs(node *treenode.TreeNode) []int {
+func bfs(node *TreeNode) (ret []int) {
 	if node == nil {
-		return nil
+		return
 	}
 
-	var ret []int
-	var nodeStack []*treenode.TreeNode
-	for node != nil || len(nodeStack) > 0 {
+	var stack []*TreeNode
+	for node != nil || len(stack) > 0 {
 		for node != nil {
 			ret = append(ret, node.Val)
-			nodeStack = append(nodeStack, node)
+			stack = append(stack, node)
 			node = node.Left
 		}
-		// 出栈
-		node = nodeStack[len(nodeStack)-1]
-		nodeStack = nodeStack[:len(nodeStack)-1]
-
+		// pop
+		node = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
 		node = node.Right
 	}
-	return ret
+	return
 }
 
 // 深度优先遍历
-func dfs(node *treenode.TreeNode, ret *[]int) {
+func dfs(node *TreeNode, ret *[]int) {
 	if node == nil {
 		return
 	}
@@ -45,15 +43,15 @@ func dfs(node *treenode.TreeNode, ret *[]int) {
 }
 
 func main() {
-	srcTree := &treenode.TreeNode{
+	srcTree := &TreeNode{
 		Val: 1,
-		Left: &treenode.TreeNode{
+		Left: &TreeNode{
 			Val: 2,
-			Left: &treenode.TreeNode{
+			Left: &TreeNode{
 				Val: 4,
 			},
 		},
-		Right: &treenode.TreeNode{
+		Right: &TreeNode{
 			Val: 3,
 		},
 	}

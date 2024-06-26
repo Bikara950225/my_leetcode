@@ -3,7 +3,6 @@ package main
 import (
 	_ "embed"
 	fmt "fmt"
-	"github.com/google/btree"
 	"io"
 	"net"
 	"syscall"
@@ -102,21 +101,7 @@ type entry struct {
 }
 
 func main() {
-	bTree := btree.NewG(10, func(a, b *entry) bool {
-		return a.id < b.id
-	})
-	for i := range 100 {
-		bTree.ReplaceOrInsert(&entry{
-			id: i, val: fmt.Sprintf("val%d", i),
-		})
-	}
-
-	fmt.Println(bTree.Len())
-	fmt.Println(bTree.Get(&entry{id: 50}))
-	bTree.AscendRange(&entry{id: 49}, &entry{id: 100}, func(item *entry) bool {
-		fmt.Println(item)
-		return true
-	})
+	fmt.Println("acdb" > "abc")
 }
 
 type SessionStruct struct {

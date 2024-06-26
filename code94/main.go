@@ -2,37 +2,35 @@ package main
 
 import (
 	"fmt"
-	treenode "my_leetcode/internal/tree_node"
+	. "my_leetcode/internal/tree_node"
 	"reflect"
 )
 
-func inorderTraversal(root *treenode.TreeNode) []int {
+func inorderTraversal(root *TreeNode) []int {
 	return bfs(root)
 }
 
-func bfs(node *treenode.TreeNode) []int {
+func bfs(node *TreeNode) (ret []int) {
 	if node == nil {
-		return nil
+		return
 	}
 
-	var ret []int
-	var nodeCache []*treenode.TreeNode
-	for node != nil || len(nodeCache) > 0 {
+	var stack []*TreeNode
+	for node != nil || len(stack) > 0 {
 		for node != nil {
-			nodeCache = append(nodeCache, node)
+			stack = append(stack, node)
 			node = node.Left
 		}
-		// 出栈
-		node = nodeCache[len(nodeCache)-1]
-		nodeCache = nodeCache[:len(nodeCache)-1]
-
+		// pop
+		node = stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
 		ret = append(ret, node.Val)
 		node = node.Right
 	}
-	return ret
+	return
 }
 
-func dfs(node *treenode.TreeNode, ret *[]int) {
+func dfs(node *TreeNode, ret *[]int) {
 	if node == nil {
 		return
 	}
@@ -43,19 +41,19 @@ func dfs(node *treenode.TreeNode, ret *[]int) {
 }
 
 func main() {
-	srcTree := &treenode.TreeNode{
+	srcTree := &TreeNode{
 		Val: 1,
-		Left: &treenode.TreeNode{
+		Left: &TreeNode{
 			Val: 2,
-			Left: &treenode.TreeNode{
+			Left: &TreeNode{
 				Val: 4,
 			},
 		},
-		Right: &treenode.TreeNode{
+		Right: &TreeNode{
 			Val: 3,
 		},
 	}
-	expectRet := []int{4, 2 , 1, 3}
+	expectRet := []int{4, 2, 1, 3}
 
 	ret1 := bfs(srcTree)
 	if !reflect.DeepEqual(ret1, expectRet) {
