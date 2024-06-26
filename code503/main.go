@@ -9,17 +9,19 @@ import (
 // [1,2,3,4,3] => [2,3,4,-1,4]
 func nextGreaterElements(nums []int) (ret []int) {
 	n := len(nums)
+
 	ret = make([]int, n)
 	for i := range ret {
 		ret[i] = -1
 	}
-	// 这是一个单调递减的栈，记录nums的下标
+	// di jian
 	var stack []int
 	for i := 0; i < 2*n; i++ {
-		for len(stack) > 0 && nums[i%n] > nums[stack[len(stack)-1]] {
-			ret[stack[len(stack)-1]] = nums[i%n]
-			// pop
+		item := nums[i%n]
+		for len(stack) > 0 && item > nums[stack[len(stack)-1]] {
+			popIdx := stack[len(stack)-1]
 			stack = stack[:len(stack)-1]
+			ret[popIdx] = item
 		}
 		stack = append(stack, i%n)
 	}
@@ -32,6 +34,4 @@ func main() {
 	if !reflect.DeepEqual(ret1, want1) {
 		panic(fmt.Errorf("ret1 error, got != want: %v", want1))
 	}
-
-	fmt.Printf("%v\n", nextGreaterElements([]int{1, 3, 2, 1}))
 }
