@@ -101,7 +101,8 @@ type entry struct {
 }
 
 func main() {
-	fmt.Println("acdb" > "abc")
+	ll := []int{1, 2}
+	fmt.Println(ll[0 : len(ll)-1])
 }
 
 type SessionStruct struct {
