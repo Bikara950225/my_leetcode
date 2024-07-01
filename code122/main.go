@@ -1,43 +1,26 @@
 package main
 
-import (
-	"fmt"
-	"my_leetcode/internal/tools"
-)
-
 func maxProfit(prices []int) int {
+	if len(prices) <= 0 {
+		return 0
+	}
 	// dp1为持有股票的dp; dp2为没有股票的dp
 	dp1, dp2 := -prices[0], 0
-	for i := 1; i < len(prices); i++ {
-		// 没有股票的dp模型： dp2 = max(preDp2, price+dp1), 前一个dp2和当前卖出股票的利润比对，取最大值
-		dp2 = tools.IntMax(dp2, prices[i]+dp1)
-		// 持有股票的dp模型： dp1 = max(preDp1, dp2-price), 前一个dp1和当前
-		dp1 = tools.IntMax(dp1, dp2-prices[i])
+	for _, price := range prices[1:] {
+		dp2 = max(dp2, price+dp1)
+		dp1 = max(dp1, dp2-price)
 	}
-	return tools.IntMax(dp1, dp2)
+	return dp2
 }
 
 func maxProfit2(prices []int) int {
 	if len(prices) <= 0 {
 		return 0
 	}
-	iDp, oDp := make([]int, len(prices)), make([]int, len(prices))
-	iDp[0] = -prices[0]
-	for i := 1; i < len(prices); i++ {
-		iDp[i] = max(iDp[i-1], oDp[i-1]-prices[i])
-		oDp[i] = max(oDp[i-1], iDp[i-1]+prices[i])
+	dp := [2]int{-prices[0], 0} // i/o
+	for _, price := range prices[1:] {
+		dp[1] = max(dp[1], dp[0]+price)
+		dp[0] = max(dp[0], dp[1]-price)
 	}
-	e := len(prices) - 1
-	return max(iDp[e], oDp[e])
-}
-
-func main() {
-	ret := maxProfit2([]int{7, 1, 5, 3, 6, 4})
-	// 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5 - 1 = 4 。
-	// 随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6 - 3 = 3 。
-	// 总利润为 4 + 3 = 7 。
-	expectRet := 7
-	if ret != expectRet {
-		panic(fmt.Errorf("code122 error: not expect result: %v", ret))
-	}
+	return dp[1]
 }
