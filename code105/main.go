@@ -1,56 +1,31 @@
 package main
 
-import (
-	"fmt"
-	treenode "my_leetcode/internal/tree_node"
-	"reflect"
-)
+import . "my_leetcode/internal/tree_node"
 
-var (
-	inorderMap = map[int]int{}
-)
-
-func buildTree(preorder []int, inorder []int) *treenode.TreeNode {
-	func() {
-		inorderMap = map[int]int{}
-	}()
-
-	for i, v := range inorder {
-		inorderMap[v] = i
-	}
-	inorderEnd := len(inorder) - 1
-	return dfs(preorder, inorder, 0, inorderEnd, 0, inorderEnd)
-}
-
-func dfs(preorder, inorder []int, preBegin, preEnd int, inBegin, inEnd int) *treenode.TreeNode {
-	if preBegin > preEnd || inBegin > inEnd {
-		return nil
+func buildTree(preorder, inorder []int) *TreeNode {
+	inorderMap := make(map[int]int, len(inorder))
+	for i, item := range inorder {
+		inorderMap[item] = i
 	}
 
-	currVal := preorder[preBegin]
-	node := &treenode.TreeNode{
-		Val: currVal,
+	var dfsFunc func(preBegin, preEnd int, inBegin, inEnd int) *TreeNode
+	dfsFunc = func(preBegin, preEnd int, inBegin, inEnd int) *TreeNode {
+		if preBegin > preEnd || inBegin > inEnd {
+			return nil
+		}
+
+		currVal := preorder[preBegin]
+		currInorderIdx := inorderMap[currVal]
+
+		// nextPreEnd - preBegin = currInorderIdx - inBegin
+		nextPreEnd := currInorderIdx - inBegin + preBegin
+
+		return &TreeNode{
+			Val:   currVal,
+			Left:  dfsFunc(preBegin+1, nextPreEnd, inBegin, currInorderIdx-1),
+			Right: dfsFunc(nextPreEnd+1, preEnd, currInorderIdx+1, inEnd),
+		}
 	}
-	// 当前指在 inorder 的下标
-	currInorderIndex := inorderMap[currVal]
-	// 计算left子树的 preorder 的范围
-	// (currInorderIndex - 1) - inBegin = leftPreEnd - (preBegin + 1)
-	// leftPreEnd = currInorderIndex - inBegin + preBegin
-	leftPreEnd := currInorderIndex - inBegin + preBegin
-
-	node.Left = dfs(preorder, inorder, preBegin+1, leftPreEnd, inBegin, currInorderIndex-1)
-	node.Right = dfs(preorder, inorder, leftPreEnd+1, preEnd, currInorderIndex+1, inEnd)
-
-	return node
-}
-
-func main() {
-	preorder1 := []int{3, 9, 20, 15, 7}
-	inorder1 := []int{9, 3, 15, 20, 7}
-
-	ret1 := buildTree(preorder1, inorder1)
-	ret1List := ret1.GetPreorder()
-	if !reflect.DeepEqual(ret1List, []int{3, 9, 20, 15, 7}) {
-		panic(fmt.Errorf("code105 error, not expect result: %+v", ret1List))
-	}
+	tail := len(preorder) - 1
+	return dfsFunc(0, tail, 0, tail)
 }

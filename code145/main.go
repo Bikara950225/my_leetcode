@@ -45,6 +45,27 @@ func dfs(node *TreeNode, ret *[]int) {
 	*ret = append(*ret, node.Val)
 }
 
+func bfs2(node *TreeNode) (ret []int) {
+	var stack []*TreeNode
+	var mark *TreeNode
+	for len(stack) > 0 || node != nil {
+		for node != nil {
+			stack = append(stack, node)
+			node = node.Left
+		}
+
+		popNode := stack[len(stack)-1]
+		if popNode.Right != nil && popNode.Right != mark {
+			node = popNode.Right
+		} else {
+			stack = stack[:len(stack)-1]
+			ret = append(ret, popNode.Val)
+			mark = popNode
+		}
+	}
+	return
+}
+
 func main() {
 	srcTree := &TreeNode{
 		Val: 1,
