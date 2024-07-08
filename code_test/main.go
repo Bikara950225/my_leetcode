@@ -4,7 +4,9 @@ import (
 	_ "embed"
 	fmt "fmt"
 	"io"
+	"math"
 	"net"
+	"sync/atomic"
 	"syscall"
 )
 
@@ -101,8 +103,11 @@ type entry struct {
 }
 
 func main() {
-	ll := []int{1, 2}
-	fmt.Println(ll[0 : len(ll)-1])
+	var i atomic.Int32
+	for {
+		newI := i.Add(math.MaxInt32 >> 1)
+		fmt.Println(newI)
+	}
 }
 
 type SessionStruct struct {

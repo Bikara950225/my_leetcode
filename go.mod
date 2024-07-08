@@ -5,6 +5,7 @@ go 1.22
 require (
 	github.com/emirpasic/gods/v2 v2.0.0-alpha
 	github.com/google/btree v1.1.2
+	github.com/google/uuid v1.6.0
 	github.com/satori/go.uuid v1.2.0
 )
 

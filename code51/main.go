@@ -1,88 +1,79 @@
 package main
 
-import "fmt"
-
-var (
-	ret [][]string
-	m   = map[int]struct{}{}
+import (
+	"fmt"
+	"strings"
 )
 
-func solveNQueens(n int) [][]string {
-	defer func() {
-		ret = nil
-		m = map[int]struct{}{}
-	}()
-
-	ml := make([][]int, n)
-	for i := range ml {
-		ml[i] = make([]int, n)
+func solveNQueens(n int) (ret [][]string) {
+	cache := make([][]bool, n)
+	for i := range cache {
+		cache[i] = make([]bool, n)
 	}
 
-	dfs(n, ml, 0)
-
-	return ret
-}
-
-func dfs(n int, ml [][]int, x int) {
-	if x == n {
-		subRet := make([]string, 0, n)
-		for _, xItem := range ml {
-			var subStr string
-			for _, yItem := range xItem {
-				if yItem == 0 {
-					subStr += "."
-				} else {
-					subStr += "Q"
+	ymap := make([]bool, n)
+	var handleFunc func(x int)
+	handleFunc = func(x int) {
+		if x >= n {
+			subRet := make([]string, 0, n)
+			for _, subl := range cache {
+				subStr := strings.Builder{}
+				for _, item := range subl {
+					if item {
+						subStr.WriteString("Q")
+					} else {
+						subStr.WriteString(".")
+					}
 				}
+				subRet = append(subRet, subStr.String())
 			}
-			subRet = append(subRet, subStr)
+			ret = append(ret, subRet)
+			return
 		}
-		ret = append(ret, subRet)
-		return
+
+		for y := 0; y < n; y++ {
+			if ymap[y] {
+				continue
+			}
+
+			if !checkCache(cache, x, y) {
+				continue
+			}
+
+			cache[x][y] = true
+			ymap[y] = true
+			handleFunc(x + 1)
+			cache[x][y] = false
+			ymap[y] = false
+		}
 	}
 
-	xLine := ml[x]
-	for i := 0; i < n; i++ {
-		if _, ok := m[i]; ok {
-			continue
-		}
-		if !check(ml, n, x, i) {
-			continue
-		}
-
-		xLine[i] = 1
-		m[i] = struct{}{}
-
-		dfs(n, ml, x+1)
-
-		xLine[i] = 0
-		delete(m, i)
-	}
+	handleFunc(0)
+	return
 }
 
-func check(ml [][]int, n, x, y int) bool {
-	x1, y1 := x-1, y-1
-	for x1 >= 0 && y1 >= 0 {
-		if ml[x1][y1] == 1 {
+func checkCache(cache [][]bool, x, y int) bool {
+	xx, yy := x-1, y-1
+	for xx >= 0 && yy >= 0 {
+		if cache[xx][yy] {
 			return false
 		}
-		x1--
-		y1--
+		xx--
+		yy--
 	}
 
-	x2, y2 := x-1, y+1
-	for x2 >= 0 && y2 < n {
-		if ml[x2][y2] == 1 {
+	xx, yy = x-1, y+1
+	for xx >= 0 && yy < len(cache) {
+		if cache[xx][yy] {
 			return false
 		}
-		x2--
-		y2++
+		xx--
+		yy++
 	}
-
 	return true
 }
 
 func main() {
-	ret1 := solveNQueens(4)
+	ret1 := solveNQueens(5)
 	fmt.Println(ret1)
 }

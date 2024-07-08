@@ -1,34 +1,27 @@
 package main
 
 func removeDuplicateLetters(s string) string {
-	// 遍历一次，去重，找到字母最小下标
-	cCount := [26]int{}
-	for i := 0; i < len(s); i++ {
-		cCount[s[i]-'a']++
+	bs := [26]int{}
+	for i := range s {
+		bs[s[i]-'a']++
 	}
 
-	// 单调递增
 	var stack []byte
 	inStack := [26]bool{}
-	for i := 0; i < len(s); i++ {
+	for i := range s {
 		c := s[i]
+		ci := c - 'a'
 
-		bi := c - 'a'
-		// 遍历过要减少次数
-		cCount[bi]--
-
-		if inStack[bi] {
+		bs[ci]--
+		if inStack[ci] {
 			continue
 		}
-		for len(stack) > 0 && c < stack[len(stack)-1] && cCount[stack[len(stack)-1]-'a'] > 0 {
-			// pop
-			tail := len(stack) - 1
-			popc := stack[tail]
-			stack = stack[:tail]
-			inStack[popc-'a'] = false
+		for len(stack) > 0 && c < stack[len(stack)-1] && bs[stack[len(stack)-1]-'a'] > 0 {
+			inStack[stack[len(stack)-1]-'a'] = false
+			stack = stack[:len(stack)-1]
 		}
-		stack = append(stack, byte(c))
-		inStack[c-'a'] = true
+		stack = append(stack, c)
+		inStack[ci] = true
 	}
 	return string(stack)
 }

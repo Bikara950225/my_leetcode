@@ -2,10 +2,10 @@ package main
 
 import (
 	"my_leetcode/internal/tools"
-	treenode "my_leetcode/internal/tree_node"
+	. "my_leetcode/internal/tree_node"
 )
 
-func maxDepth(root *treenode.TreeNode) int {
+func maxDepth(root *TreeNode) int {
 	if root == nil {
 		return 0
 	}
