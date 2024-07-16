@@ -6,6 +6,8 @@ import (
 	"io"
 	"math"
 	"net"
+	"net/http"
+	"runtime"
 	"sync/atomic"
 	"syscall"
 )
@@ -108,6 +110,11 @@ func main() {
 		newI := i.Add(math.MaxInt32 >> 1)
 		fmt.Println(newI)
 	}
+	runtime.mspan
+	runtime.mcentral
+
+	http.RoundTripper()
+	http.Handler()
 }
 
 type SessionStruct struct {
