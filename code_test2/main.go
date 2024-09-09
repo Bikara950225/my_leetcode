@@ -6,7 +6,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"sync"
 	"time"
 )
 
@@ -61,7 +60,6 @@ func dropCR(data []byte) []byte {
 }
 
 func main() {
-	var mm sync.Map
-	mm.Store("123", "321")
-	fmt.Println(mm.Load("123"))
+	var uu uint32
+	fmt.Println(^uu)
 }

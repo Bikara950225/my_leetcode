@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"runtime"
 )
 
 func baseRand7() int {
@@ -64,11 +65,13 @@ func rand5ToRand10() int {
 	}
 	second := baseRand5()
 
-	if (first&0b1) == 0b1 {
+	if (first & 0b1) == 0b1 {
 		return second
 	} else {
 		return second + 5
 	}
+
+	runtime.g
 }
 
 func main() {

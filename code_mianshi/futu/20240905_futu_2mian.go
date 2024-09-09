@@ -1,0 +1,3 @@
+package futu
+
+func method() {}
