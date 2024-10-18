@@ -45,7 +45,7 @@ func Test_trieAll_Insert_Search(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := NewTrieAll()
+			s := Constructor2()
 			for _, w := range tt.fields.words {
 				s.Insert(w)
 			}

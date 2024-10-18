@@ -5,24 +5,23 @@ package main
 func trapWithDP(height []int) (ret int) {
 	// 用DP的话，时间复杂度为 O(n)；空间复杂度为 O(n)
 
-	// 用于记录下标i左边的最大高度的dp
-	leftDp := make([]int, len(height))
-	leftDp[0] = height[0]
+	ldp := make([]int, len(height))
+	ldp[0] = height[0]
 	for i := 1; i < len(height); i++ {
-		leftDp[i] = max(height[i], leftDp[i-1])
+		ldp[i] = min(ldp[i-1], height[i])
 	}
-	// 用于记录下标i右边的最大高度的dp
-	rightDp := make([]int, len(height))
-	rightDp[len(height)-1] = height[len(height)-1]
-	for i := len(height) - 2; i >= 0; i-- {
-		rightDp[i] = max(height[i], rightDp[i+1])
+
+	rdp := make([]int, len(height))
+	e := len(height) - 1
+	rdp[e] = height[e]
+	for i := e - 1; i >= 0; i-- {
+		rdp[i] = max(rdp[i+1], height[i])
 	}
 
 	for i, h := range height {
-		// 找出当前下标中，左、右高边的最小的那一个边(木桶原理，取短板)
-		ret += min(leftDp[i], rightDp[i]) - h
+		ret += min(ldp[i], rdp[i]) - h
 	}
-	return ret
+	return
 }
 
 // trapWithStack 基于单调递减栈实现

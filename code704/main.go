@@ -3,21 +3,19 @@ package main
 import "fmt"
 
 func search(nums []int, target int) int {
-	i := 0
-	j := len(nums) - 1
+	i, j := 0, len(nums)-1
 	for i < j {
-		h := (i + j) >> 1
-		if nums[h] >= target {
-			j = h
+		m := (i + j) >> 1
+		if target > nums[m] {
+			i = m + 1
 		} else {
-			i = h + 1
+			j = m
 		}
 	}
-
-	if nums[i] != target {
-		i = -1
+	if nums[i] == target {
+		return i
 	}
-	return i
+	return -1
 }
 
 func main() {

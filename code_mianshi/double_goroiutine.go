@@ -1,6 +1,8 @@
 package code_mianshi
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func doubleG() {
 	ch := make(chan struct{})
@@ -40,4 +42,23 @@ func doubleG2() {
 		fmt.Printf("[%d]B\n", i)
 		ch1 <- struct{}{}
 	}
+}
+
+func doubleGT() {
+	n := 50
+	ch := make(chan string)
+
+	ff := func(s string) {
+		for range n {
+			fmt.Println(<-ch)
+			ch <- s
+		}
+		if _, ok := <-ch; ok {
+			close(ch)
+		}
+	}
+
+	go ff("B")
+	ch <- "A"
+	ff("A")
 }

@@ -1,6 +1,7 @@
 package sort
 
 import (
+	"slices"
 	"testing"
 )
 
@@ -46,15 +47,11 @@ func TestQuickSort(t *testing.T) {
 			src := tt.args.src()
 			QuickSort(src)
 
-			for i := range src {
-				if i == len(src)-1 {
-					break
-				}
-
-				if src[i] > src[i+1] {
-					t.Errorf("TestQuickSort() error, not ase: \n%+v", src)
-					return
-				}
+			if !slices.IsSortedFunc(src, func(i, j int) int {
+				return i - j
+			}) {
+				t.Errorf("TestQuickSort() error, not ase: \n%+v", src)
+				return
 			}
 		})
 	}

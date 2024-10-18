@@ -5,7 +5,7 @@ import (
 )
 
 func QuickSort(src []int) {
-	quickSort2(src, 0, len(src)-1)
+	quickSort3(src)
 }
 
 func quickSort1(nums []int, b, e int) {
@@ -53,4 +53,29 @@ func quickSort2(nums []int, b, e int) {
 
 	quickSort2(nums, b, j-1)
 	quickSort2(nums, j+1, e)
+}
+
+func quickSort3(nums []int) []int {
+	b, e := 0, len(nums)-1
+	randI := rand.Int() % len(nums)
+	mark := nums[randI]
+	nums[e], nums[randI] = nums[randI], nums[e]
+
+	j := -1
+	for i := 0; i < e; i++ {
+		if mark >= nums[i] {
+			j++
+			nums[i], nums[j] = nums[j], nums[i]
+		}
+	}
+	j++
+	nums[e], nums[j] = nums[j], nums[e]
+
+	if b < j-1 {
+		quickSort3(nums[:j])
+	}
+	if j+1 < e {
+		quickSort3(nums[j+1:])
+	}
+	return nums
 }

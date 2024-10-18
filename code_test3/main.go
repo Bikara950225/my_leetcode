@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"html/template"
+	"os"
+)
 
 //
 //func method(src []int) (ret int) {
@@ -20,7 +24,38 @@ import "fmt"
 //	return
 //}
 
+func doubleG() {
+	ch := make(chan struct{})
+
+	go func() {
+		for range 50 {
+			<-ch
+			fmt.Println("A")
+			ch <- struct{}{}
+		}
+		if _, ok := <-ch; ok {
+			close(ch)
+		}
+	}()
+
+	ch <- struct{}{}
+	for range 50 {
+		<-ch
+		fmt.Println("B")
+		ch <- struct{}{}
+	}
+	if _, ok := <-ch; ok {
+		close(ch)
+	}
+}
+
 func main() {
-	fmt.Println(62 - len("-helper-bu46je"))
-	fmt.Println(len("promotion-c-page-storefront-ab-gd18565-chaos-1725614823"))
+	l := []string{"1", "2"}
+	src := `key = [{{range $idx, $item := .}}{{if $idx}},{{end}}"{{$item}}"{{end}}]`
+
+	tt, err := template.New("123").Parse(src)
+	if err != nil {
+		panic(err)
+	}
+	tt.Execute(os.Stdout, l)
 }
